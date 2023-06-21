@@ -5,4 +5,7 @@ from django.template.response import TemplateResponse
 
 # Create your views here.
 def index(request):
-    return TemplateResponse(request, 'index.html', {})
+    return render(request, 'index.html')
+
+def ola(request):
+    return HttpResponse('Olá, Django')
