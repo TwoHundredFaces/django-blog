@@ -9,18 +9,20 @@ block css %}
 />
 <!-- CSS do Projeto-->
 <link rel="stylesheet" href="{% static 'css/base.css' %}" />
-{% endblock %} {% block header %}
+
+
+{% block header %}
 <main role="main">
-  <div
-    class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm"
-  >
+  <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
     <h5 class="my-0 mr-md-auto font-weight-normal">
       <a href="{% url 'index' %}">Django</a>
     </h5>
     <a class="p-2 text-dark" href="{% url 'ola' %}">Sobre</a>
   </div>
 </main>
-{% endblock %} {% block main %}
+{% endblock %} 
+
+{% block main %}
 <div class="container">
   {% block content %}
   <h1>Últimos artigos</h1>
