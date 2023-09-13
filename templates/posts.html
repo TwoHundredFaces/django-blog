@@ -11,10 +11,17 @@
       <h1>Bem vindo ao Blog</h1>
     </main>
     {% for post in posts_list %}
-        <article>
-        <h2>Em: {{ post.pub_date|date:"d / m / Y" }}</h2>
-        <p>{{ post.body_text }}</p>
-        </article>
+    <article>
+      <h2>Em: {{ post.pub_date|date:"d / m / Y" }}</h2>
+      <p>{{ post.body_text }}</p>
+    </article>
+    <a
+      href="{% url 'post_add' %}"
+      class="btn btn-lg btn-primary font-weight-bold"
+    >
+      + Post
+    </a>
+
     {% endfor %}
   </body>
 </html>

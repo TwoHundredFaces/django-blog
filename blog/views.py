@@ -7,6 +7,45 @@ from django.template.response import TemplateResponse
 from django.views.generic.detail import DetailView
 from blog.models import Post
 
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def create_post(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        body_text = data.get('body_text')
+        if body_text is None:
+            data = {'success': False, 'error': 'Texto do post inválido.'}
+            status = 400 # Bad Request => erro do client
+        else:
+            post = Post(body_text=body_text)
+            post.save()
+            post_data = Post.objects.filter(
+                pk=post.id
+            ).values(
+                'pk', 'body_text', 'pub_date'
+            ).first()
+            
+            data = {'success': True, 'post': post_data}
+            status = 201 # Created
+            
+        response = HttpResponse(
+            json.dumps(data, indent=1, cls=DjangoJSONEncoder),
+            content_type="application/json",
+            status=status
+        )
+        response['Access-Control-Allow-Origin'] = '*'
+        return response
+
+class PostCreateView(CreateView):
+    model = Post
+    template_name = 'post/post_form.html'
+    fields = ('body_text', )
+    success_url = reverse_lazy('posts_list')
+
 def get_all_posts(request):
     posts = list(Post.objects.values('pk', 'body_text', 'pub_date'))
     data = {'success': True, 'posts': posts}
@@ -26,7 +65,7 @@ def index(request):
 
 def ola(request):
     #return HttpResponse('Olá, Django')
-    return render(request, 'home.html')
+    # return render(request, 'home.html')
     posts = Post.objects.all()
     context = {'posts_list': posts }
     return render(request, 'posts.html', context)
