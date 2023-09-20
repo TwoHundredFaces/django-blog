@@ -4,13 +4,19 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 from django.http import HttpResponse
 from django.template.response import TemplateResponse
-from django.views.generic.detail import DetailView
+from django.views.generic import DetailView, ListView, TemplateView
 from blog.models import Post
 
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
 from django.views.decorators.csrf import csrf_exempt
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'post/post_list.html'
+    context_object_name = 'posts'
+
 
 @csrf_exempt
 def create_post(request):
@@ -74,6 +80,9 @@ class PostDetailView(DetailView):
     model = Post
     template_name = 'post/detail.html'
     context_object_name = 'post'
+    
+class SobreTemplateView(TemplateView):
+    template_name = 'post/sobre.html'
 
 def get_post(request, post_id):
     post = Post.objects.filter(
