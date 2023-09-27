@@ -26,13 +26,13 @@ class PostModelForm(forms.ModelForm):
         labels = {'body_text': '', 'categoria': 'Assunto'}
 
 
-def clean(self):
-    cleaned_data = super().clean() # recupera todos os dados enviado pelo form
-    pub_date = cleaned_data.get('pub_date') # recupera um campo específico
-    pub_date = pub_date.replace(tzinfo=None)
-    
-    if pub_date > datetime.today(): # exemplo para demonstrar a validação
-        self.add_error(
-            'pub_date',
-            forms.ValidationError('Não é permitido datas futuras')
-        )
+    def clean(self):
+        cleaned_data = super().clean() # recupera todos os dados enviado pelo form
+        pub_date = cleaned_data.get('pub_date') # recupera um campo específico
+        pub_date = pub_date.replace(tzinfo=None)
+        
+        if pub_date > datetime.today(): # exemplo para demonstrar a validação
+            self.add_error(
+                'pub_date',
+                forms.ValidationError('Não é permitido datas futuras')
+            )
