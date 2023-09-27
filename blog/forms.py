@@ -35,4 +35,4 @@ def clean(self):
         self.add_error(
             'pub_date',
             forms.ValidationError('Não é permitido datas futuras')
-    )
+        )
