@@ -6,11 +6,13 @@ from django.http import HttpResponse
 from django.template.response import TemplateResponse
 from django.views.generic import DetailView, ListView, TemplateView
 from blog.models import Post
+from blog.forms import PostModelForm
 
 from django.views.generic.edit import CreateView
 from django.urls import reverse_lazy
 
 from django.views.decorators.csrf import csrf_exempt
+
 
 class PostListView(ListView):
     model = Post
@@ -25,7 +27,7 @@ def create_post(request):
         body_text = data.get('body_text')
         if body_text is None:
             data = {'success': False, 'error': 'Texto do post inválido.'}
-            status = 400 # Bad Request => erro do client
+            status = 400  # Bad Request => erro do client
         else:
             post = Post(body_text=body_text)
             post.save()
@@ -34,10 +36,10 @@ def create_post(request):
             ).values(
                 'pk', 'body_text', 'pub_date'
             ).first()
-            
+
             data = {'success': True, 'post': post_data}
-            status = 201 # Created
-            
+            status = 201  # Created
+
         response = HttpResponse(
             json.dumps(data, indent=1, cls=DjangoJSONEncoder),
             content_type="application/json",
@@ -46,11 +48,14 @@ def create_post(request):
         response['Access-Control-Allow-Origin'] = '*'
         return response
 
+
 class PostCreateView(CreateView):
     model = Post
     template_name = 'post/post_form.html'
-    fields = ('body_text', )
+    # fields = ('body_text', )
     success_url = reverse_lazy('posts_list')
+    form_class = PostModelForm
+
 
 def get_all_posts(request):
     posts = list(Post.objects.values('pk', 'body_text', 'pub_date'))
@@ -66,23 +71,29 @@ def post_show(request, post_id):
     return render(request, 'post/detail.html', {'post': post})
 
 # Create your views here.
+
+
 def index(request):
     return render(request, 'index.html', {'titulo': 'Últimos Artigos'})
 
+
 def ola(request):
-    #return HttpResponse('Olá, Django')
+    # return HttpResponse('Olá, Django')
     # return render(request, 'home.html')
     posts = Post.objects.all()
-    context = {'posts_list': posts }
+    context = {'posts_list': posts}
     return render(request, 'posts.html', context)
+
 
 class PostDetailView(DetailView):
     model = Post
     template_name = 'post/detail.html'
     context_object_name = 'post'
-    
+
+
 class SobreTemplateView(TemplateView):
     template_name = 'post/sobre.html'
+
 
 def get_post(request, post_id):
     post = Post.objects.filter(
@@ -90,16 +101,16 @@ def get_post(request, post_id):
     ).values(
         'pk', 'body_text', 'pub_date'
     ).first()
-    
+
     data = {'success': True, 'post': post}
     status = 200
     if post is None:
         data = {'success': False, 'error': 'Post ID não existe.'}
-        status=404
+        status = 404
     response = HttpResponse(
         json.dumps(data, indent=1, cls=DjangoJSONEncoder),
         content_type="application/json",
         status=status
-)
-    response['Access-Control-Allow-Origin'] = '*' 
+    )
+    response['Access-Control-Allow-Origin'] = '*'
     return response

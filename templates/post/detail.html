@@ -1,7 +1,11 @@
-{% extends '_layout1.html' %}
-{% block content %} 
-    <article>
-    <h1>{{ post.pub_date|date:"d / m / Y" }}</h1>
-    <p>{{ post.body_text }}</p>
-    </article>
+{% extends '_layout1.html' %} 
+
+{% block content %}
+<article>
+  <h1>{{ post.pub_date|date:"d / m / Y" }}</h1>
+  {% if post.categoria %}
+    <span>Categoria: {{ post.categoria }}</span>
+  {% endif %}
+  <p>{{ post.body_text }}</p>
+</article>
 {% endblock %}
