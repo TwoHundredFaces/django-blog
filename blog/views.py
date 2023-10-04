@@ -15,6 +15,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from django.contrib import messages
 
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
 
 class PostListView(ListView):
     model = Post
@@ -51,7 +55,7 @@ def create_post(request):
         return response
 
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
     template_name = 'post/post_form.html'
     # fields = ('body_text', )
@@ -80,7 +84,7 @@ def post_show(request, post_id):
 
 # Create your views here.
 
-
+@login_required
 def index(request):
     return render(request, 'index.html', {'titulo': 'Últimos Artigos'})
 

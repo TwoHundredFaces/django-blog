@@ -21,6 +21,14 @@ block css %}
     <a class="p-2 text-dark" href="{% url 'ola' %}">Sobre</a>
   </div>
 </main>
+
+{% if user.is_authenticated %} {# objeto user sempre está disponível nos templates #}
+  <a class="p-2 text-dark" href="{% url 'logout' %}">Sair</a>
+{% else %}
+  <a class="p-2 text-dark" href="{% url 'signup' %}">Cadastrar</a>
+  <a class="p-2 text-dark" href="{% url 'login' %}">Acessar</a>
+{% endif %}
+
 {% endblock %} 
 
 {% block main %}
