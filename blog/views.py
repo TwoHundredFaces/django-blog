@@ -13,6 +13,8 @@ from django.urls import reverse_lazy
 
 from django.views.decorators.csrf import csrf_exempt
 
+from django.contrib import messages
+
 
 class PostListView(ListView):
     model = Post
@@ -55,6 +57,12 @@ class PostCreateView(CreateView):
     # fields = ('body_text', )
     success_url = reverse_lazy('posts_list')
     form_class = PostModelForm
+    success_message = 'Postagem salva com sucesso.'
+    
+    def form_valid(self, request, *args, **kwargs):
+        messages.success(self.request, self.success_message)
+        return super(PostCreateView, self).form_valid(request, *args, **kwargs)
+
 
 
 def get_all_posts(request):
