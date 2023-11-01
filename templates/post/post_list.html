@@ -6,20 +6,28 @@
   </div>
   <div class="card-body">
     <a href="{% url 'post_add' %}" class="btn btn-primary mb-3">
-      + Novo post
-    </a>
-    <a href="{% url 'post_edit' pk=post.id %}" class="link-secondary">
-      Editar
-    </a>
-    <a href="{% url 'post_delete' pk=post.id %}" class="link-secondary">
-      Excluir
-    </a>
+        + Novo post
+      </a>
+
     {% for post in posts %}
+      <a href="{% url 'post_edit' pk=post.id %}" class="link-secondary">
+        Editar
+      </a>
+      <a href="{% url 'post_delete' pk=post.id %}" class="link-secondary">
+        Excluir
+      </a>
     <article>
       <h2>Em: {{ post.pub_date|date:"d / m / Y" }}</h2>
       {% if post.categoria %}
         <span>Categoria: {{ post.categoria }}</span>
       {% endif %}
+
+      {% if post.autor %}
+        <span>Autor: {{ post.autor.username }}</span>
+      
+      {% else %}
+        <span>Autor: Desconhecido</span>
+      {% endif %} <br>
       <p>{{ post.body_text }}</p>
     </article>
     {% endfor %}
